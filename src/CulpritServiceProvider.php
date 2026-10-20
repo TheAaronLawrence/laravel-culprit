@@ -23,7 +23,7 @@ final class CulpritServiceProvider extends ServiceProvider
 
         $this->app->singleton(PathNormaliser::class, fn (): PathNormaliser => new PathNormaliser($this->app->basePath()));
 
-        foreach ([ErrorReporter::class, ReportThrottle::class, CurrentJob::class, CurrentCommand::class, CompiledViewMapper::class] as $class) {
+        foreach ([Culprit::class, TrackerClient::class, PayloadEncoder::class, ErrorReporter::class, ReportThrottle::class, CurrentJob::class, CurrentCommand::class, CompiledViewMapper::class] as $class) {
             $this->app->singleton($class);
         }
     }

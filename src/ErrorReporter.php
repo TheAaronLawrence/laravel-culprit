@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace TheAaronLawrence\Culprit;
 
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
-use stdClass;
 use Throwable;
 
 /**
  * Sends reported exceptions to the error tracking app.
- *
- * Lives in the sample app for now; it moves into package/ later.
  *
  * Reporting must never break the app or make an outage worse: every failure
  * is swallowed, HTTP requests send after the response has gone out, the same
@@ -26,6 +22,8 @@ final class ErrorReporter
         private readonly PayloadFactory $payloads,
         private readonly ReportThrottle $throttle,
         private readonly ContextCollector $context,
+        private readonly TrackerClient $client,
+        private readonly PayloadEncoder $encoder,
     ) {}
 
     public function report(Throwable $exception): void
@@ -49,8 +47,9 @@ final class ErrorReporter
     private function prepare(Throwable $exception): void
     {
         $url = config('culprit.url');
+        $token = config('culprit.key');
 
-        if (! is_string($url) || $url === '' || $this->throttle->isBackingOff()) {
+        if (! is_string($url) || $url === '' || ! is_string($token) || $token === '' || $this->throttle->isBackingOff()) {
             return;
         }
 
@@ -58,8 +57,7 @@ final class ErrorReporter
             return;
         }
 
-        $body = $this->encode($this->payloads->make($exception));
-        $token = (string) config('culprit.key');
+        $body = $this->encoder->encode($this->payloads->make($exception));
 
         $send = fn () => $this->send($url, $token, $body);
 
@@ -79,12 +77,7 @@ final class ErrorReporter
         }
 
         try {
-            $response = Http::connectTimeout(1)
-                ->timeout(2)
-                ->withToken($token)
-                ->acceptJson()
-                ->withBody($body, 'application/json')
-                ->post($url);
+            $response = $this->client->post($url, $token, $body);
 
             $this->handle($response);
         } catch (Throwable) {
@@ -109,25 +102,5 @@ final class ErrorReporter
     private function fingerprint(Throwable $exception): string
     {
         return sha1($exception::class.'|'.$exception->getFile().'|'.$exception->getLine());
-    }
-
-    /**
-     * @param  array<string, mixed>  $payload
-     */
-    private function encode(array $payload): string
-    {
-        // Objects in the contract stay objects on the wire when empty.
-        if (($payload['truncated'] ?? null) === []) {
-            $payload['truncated'] = new stdClass;
-        }
-
-        if (($payload['context']['request']['headers'] ?? null) === []) {
-            $payload['context']['request']['headers'] = new stdClass;
-        }
-
-        return json_encode(
-            $payload,
-            JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
-        );
     }
 }

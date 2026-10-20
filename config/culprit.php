@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use TheAaronLawrence\Culprit\Culprit;
 
 return [
 
@@ -14,7 +15,7 @@ return [
     |
     */
 
-    'url' => env('CULPRIT_URL', 'http://useculprit.test/api/errors'),
+    'url' => env('CULPRIT_URL', Culprit::DEFAULT_URL),
 
     'key' => env('CULPRIT_KEY'),
 

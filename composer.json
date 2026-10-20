@@ -40,7 +40,10 @@
         "laravel": {
             "providers": [
                 "TheAaronLawrence\\Culprit\\CulpritServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Culprit": "TheAaronLawrence\\Culprit\\Facades\\Culprit"
+            }
         }
     },
     "scripts": {

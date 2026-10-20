@@ -9,6 +9,7 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Support\Defer\DeferredCallbackCollection;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
+use TheAaronLawrence\Culprit\Culprit;
 use TheAaronLawrence\Culprit\ErrorReporter;
 use TheAaronLawrence\Culprit\Tests\Fixtures\Thrower;
 
@@ -38,6 +39,39 @@ final class SendingTest extends ReporterTestCase
         $this->reporter()->report(new RuntimeException('Nowhere'));
 
         Http::assertNothingSent();
+    }
+
+    public function test_nothing_is_sent_without_a_key(): void
+    {
+        config(['culprit.key' => null]);
+
+        $this->reporter()->report(new RuntimeException('No key'));
+
+        Http::assertNothingSent();
+    }
+
+    public function test_nothing_is_sent_when_the_key_is_empty(): void
+    {
+        config(['culprit.key' => '']);
+
+        $this->reporter()->report(new RuntimeException('Empty key'));
+
+        Http::assertNothingSent();
+    }
+
+    public function test_nothing_is_sent_when_the_url_is_empty(): void
+    {
+        config(['culprit.url' => '']);
+
+        $this->reporter()->report(new RuntimeException('Empty URL'));
+
+        Http::assertNothingSent();
+    }
+
+    public function test_the_default_url_is_used_when_none_is_set(): void
+    {
+        $this->assertSame('http://useculprit.test/api/errors', Culprit::DEFAULT_URL);
+        $this->assertSame(Culprit::DEFAULT_URL, (require __DIR__.'/../../config/culprit.php')['url']);
     }
 
     public function test_sending_is_deferred_until_after_the_response(): void

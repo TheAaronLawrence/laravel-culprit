@@ -6,12 +6,13 @@ namespace TheAaronLawrence\Culprit\Tests;
 
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Exceptions\Handler;
 use Orchestra\Testbench\TestCase as Orchestra;
+use TheAaronLawrence\Culprit\Culprit;
 use TheAaronLawrence\Culprit\CulpritServiceProvider;
-use TheAaronLawrence\Culprit\ErrorReporter;
 use TheAaronLawrence\Culprit\Tests\Fixtures\InspireCommand;
 use TheAaronLawrence\Culprit\Tests\Fixtures\PlaygroundFailCommand;
-use Throwable;
 
 use function Orchestra\Testbench\default_skeleton_path;
 
@@ -39,10 +40,8 @@ abstract class TestCase extends Orchestra
         $app['config']->set('app.key', 'base64:33R4vHfujC7MVfmgTrzhJG4Ou2yALnQhjdGjp6QBj18=');
 
         // What the app's exception hook does: hand every reported exception to the reporter.
-        $app->afterResolving(ExceptionHandler::class, function (ExceptionHandler $handler): void {
-            $handler->reportable(function (Throwable $e): void {
-                app(ErrorReporter::class)->report($e);
-            });
+        $app->afterResolving(ExceptionHandler::class, function (Handler $handler): void {
+            app(Culprit::class)->handles(new Exceptions($handler));
         });
 
         // Added when Artisan is built, so the command events can still be rerouted.
