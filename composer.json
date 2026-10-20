@@ -12,14 +12,7 @@
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.8.2 || ^8.0",
-        "illuminate/auth": "^12.0|^13.0",
-        "illuminate/console": "^12.0|^13.0",
-        "illuminate/contracts": "^12.0|^13.0",
-        "illuminate/database": "^12.0|^13.0",
-        "illuminate/http": "^12.0|^13.0",
-        "illuminate/queue": "^12.0|^13.0",
-        "illuminate/support": "^12.0|^13.0",
-        "illuminate/view": "^12.0|^13.0"
+        "laravel/framework": "^12.0|^13.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",

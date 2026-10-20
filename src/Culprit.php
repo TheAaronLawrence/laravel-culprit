@@ -21,7 +21,11 @@ final class Culprit
     public function handles(Exceptions $exceptions): void
     {
         $exceptions->report(function (Throwable $e): void {
-            app(ErrorReporter::class)->report($e);
+            try {
+                app(ErrorReporter::class)->report($e);
+            } catch (Throwable) {
+                // Reporting must never break the host app.
+            }
         });
     }
 }

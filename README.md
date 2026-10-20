@@ -32,6 +32,24 @@ Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit
 
 With no `CULPRIT_KEY` (or an empty `CULPRIT_URL`), nothing is reported and no HTTP calls are made.
 
+### Older app structure
+
+Apps upgraded from before Laravel 11 may still have `app/Exceptions/Handler.php` and `app/Http/Kernel.php`. They have no `withExceptions`.
+
+In `Handler::register()`, call `handles()` with a new `Exceptions` object:
+
+```php
+use Illuminate\Foundation\Configuration\Exceptions;
+use TheAaronLawrence\Culprit\Facades\Culprit;
+
+public function register(): void
+{
+    Culprit::handles(new Exceptions($this));
+}
+```
+
+HTTP errors are sent after the response, using deferred callbacks. Check that `\Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class` is in the global `$middleware` list in `app/Http/Kernel.php`. Add it if it is missing. Without it, HTTP errors are never sent, even though `culprit:test` works.
+
 ## Configuration
 
 Publish the config file with `php artisan vendor:publish --tag=culprit-config` if you need to change the redaction lists.

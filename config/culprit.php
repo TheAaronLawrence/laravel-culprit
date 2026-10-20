@@ -11,7 +11,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Where reports are sent, and the project's key (sent as a bearer token).
-    | Nothing is sent when the URL is empty.
+    | Nothing is sent when the key or the URL is empty.
     |
     */
 

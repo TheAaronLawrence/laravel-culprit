@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use TheAaronLawrence\Culprit\Culprit;
+use TheAaronLawrence\Culprit\ErrorReporter;
 use TheAaronLawrence\Culprit\Facades\Culprit as CulpritFacade;
 
 final class HandlesTest extends ReporterTestCase
@@ -40,5 +41,21 @@ final class HandlesTest extends ReporterTestCase
         $handler->report(new RuntimeException('Via facade'));
 
         $this->assertSame('Via facade', $this->lastSentPayload()['message']);
+    }
+
+    public function test_an_unresolvable_reporter_neither_throws_nor_stops_laravel_logging(): void
+    {
+        $handler = $this->freshHandler();
+        app(Culprit::class)->handles(new Exceptions($handler));
+
+        app()->bind(ErrorReporter::class, function (): never {
+            throw new RuntimeException('Cannot resolve the reporter');
+        });
+
+        $log = Log::spy();
+
+        $handler->report(new RuntimeException('Still logged'));
+
+        $log->shouldHaveReceived('error')->once();
     }
 }
