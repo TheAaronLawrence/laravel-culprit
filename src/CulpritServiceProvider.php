@@ -11,6 +11,7 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\Looping;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use TheAaronLawrence\Culprit\Commands\TestCommand;
 
 /**
  * Wires the reporter up. The exception hook itself is registered by the app.
@@ -31,6 +32,10 @@ final class CulpritServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([__DIR__.'/../config/culprit.php' => $this->app->configPath('culprit.php')], 'culprit-config');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([TestCommand::class]);
+        }
 
         Event::listen(JobProcessing::class, fn (JobProcessing $event) => $this->app->make(CurrentJob::class)->set($event->job));
         Event::listen(JobProcessed::class, fn () => $this->app->make(CurrentJob::class)->clear());
