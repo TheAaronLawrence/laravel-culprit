@@ -28,7 +28,9 @@ final class CompiledViewMapper
         }
 
         try {
-            $mapped = app(BladeMapper::class)->detectLineNumber($source, $line);
+            // detectLineNumber() is public on Laravel 13 but protected on 12, so
+            // call it from inside the mapper's own scope to work on both.
+            $mapped = (fn (): int => $this->detectLineNumber($source, $line))->call(app(BladeMapper::class));
         } catch (Throwable) {
             $mapped = $line;
         }

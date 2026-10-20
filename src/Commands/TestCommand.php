@@ -66,6 +66,11 @@ final class TestCommand extends Command
         }
 
         $this->components->error("Culprit answered {$response->status()}.");
+        $this->line(match ($response->status()) {
+            413 => 'The report was too large for the tracker.',
+            429 => 'The tracker is rate-limiting this project, try again shortly.',
+            default => 'Check CULPRIT_URL points at your tracker, and look at its logs.',
+        });
 
         return self::FAILURE;
     }

@@ -70,6 +70,27 @@ final class TestCommandTest extends ReporterTestCase
 
         $this->culpritTest()
             ->expectsOutputToContain('answered 429')
+            ->expectsOutputToContain('rate-limiting this project')
+            ->assertExitCode(1);
+    }
+
+    public function test_it_explains_a_report_that_is_too_large(): void
+    {
+        $this->trackerResponse = Http::response([], 413);
+
+        $this->culpritTest()
+            ->expectsOutputToContain('answered 413')
+            ->expectsOutputToContain('too large for the tracker')
+            ->assertExitCode(1);
+    }
+
+    public function test_it_hints_at_the_url_for_an_unexpected_status(): void
+    {
+        $this->trackerResponse = Http::response([], 500);
+
+        $this->culpritTest()
+            ->expectsOutputToContain('answered 500')
+            ->expectsOutputToContain('Check CULPRIT_URL points at your tracker')
             ->assertExitCode(1);
     }
 
