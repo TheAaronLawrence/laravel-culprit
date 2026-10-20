@@ -1,0 +1,62 @@
+{
+    "name": "theaaronlawrence/laravel-culprit",
+    "description": "Report exceptions from your Laravel app to Culprit.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Lawrence",
+            "email": "aaron@neondigital.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.8",
+        "illuminate/auth": "^12.0|^13.0",
+        "illuminate/console": "^12.0|^13.0",
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/http": "^12.0|^13.0",
+        "illuminate/queue": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "illuminate/view": "^12.0|^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.27",
+        "orchestra/testbench": "^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TheAaronLawrence\\Culprit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TheAaronLawrence\\Culprit\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TheAaronLawrence\\Culprit\\CulpritServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "lint": "pint",
+        "lint:check": "pint --test",
+        "types:check": "phpstan analyse --memory-limit=1G",
+        "test:unit": "phpunit",
+        "test": [
+            "@lint:check",
+            "@types:check",
+            "@test:unit"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -1,0 +1,8 @@
+/tests export-ignore
+/bootstrap export-ignore
+/storage export-ignore
+/phpunit.xml.dist export-ignore
+/phpstan.neon.dist export-ignore
+/pint.json export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
