@@ -4,10 +4,16 @@ Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit
 
 ## Installation
 
-1. Install the package:
+1. Install the package. It isn't on Packagist yet, so add the GitHub repository to your app's `composer.json` first:
+
+   ```json
+   "repositories": [
+       { "type": "vcs", "url": "https://github.com/TheAaronLawrence/laravel-culprit" }
+   ]
+   ```
 
    ```bash
-   composer require theaaronlawrence/laravel-culprit
+   composer require theaaronlawrence/laravel-culprit:dev-main
    ```
 
 2. Add `Culprit::handles($exceptions);` inside `withExceptions` in `bootstrap/app.php`:
@@ -66,6 +72,8 @@ Publish the config file with `php artisan vendor:publish --tag=culprit-config` i
 ## How it behaves
 
 Reporting never breaks your app: every failure is swallowed, HTTP requests are sent after the response has gone out, the same error is sent once per 10 seconds, and 413 and 429 responses pause sending.
+
+Every report carries an `X-Culprit-Report` header, and an error raised while handling a request with that header is never reported. That lets a Culprit tracker report its own errors without looping when its ingest endpoint fails.
 
 ## License
 

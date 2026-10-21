@@ -53,6 +53,11 @@ final class ErrorReporter
             return;
         }
 
+        // Never report a failure to handle a Culprit report: it would loop.
+        if (request()->headers->has(Culprit::REPORT_HEADER)) {
+            return;
+        }
+
         if (! $this->throttle->attempt($this->fingerprint($exception))) {
             return;
         }

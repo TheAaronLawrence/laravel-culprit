@@ -21,6 +21,7 @@ final class TrackerClient
         return Http::connectTimeout(1)
             ->timeout(2)
             ->withToken($key)
+            ->withHeaders([Culprit::REPORT_HEADER => '1'])
             ->acceptJson()
             ->withBody($body, 'application/json')
             ->post($url);

@@ -15,6 +15,13 @@ final class Culprit
     public const DEFAULT_URL = 'http://useculprit.test/api/errors';
 
     /**
+     * Sent with every report. An error raised while handling a request that
+     * carries it is never reported, so a tracker can report its own errors
+     * without looping when its ingest endpoint fails.
+     */
+    public const REPORT_HEADER = 'X-Culprit-Report';
+
+    /**
      * Report every exception to Culprit. The callback returns nothing, so
      * Laravel still logs the exception as usual.
      */
