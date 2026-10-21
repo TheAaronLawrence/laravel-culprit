@@ -22,7 +22,7 @@ Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit
 
    Laravel still logs exceptions as usual.
 
-3. Add your project's key to `.env`. `CULPRIT_URL` is only needed to point somewhere other than the default endpoint.
+3. Add your project's key to `.env`:
 
    ```dotenv
    CULPRIT_KEY=your-project-key
@@ -30,7 +30,7 @@ Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit
 
 4. Run `php artisan culprit:test` and see the error arrive in Culprit.
 
-With no `CULPRIT_KEY` (or an empty `CULPRIT_URL`), nothing is reported and no HTTP calls are made.
+With no `CULPRIT_KEY`, nothing is reported and no HTTP calls are made.
 
 ### Older app structure
 
@@ -57,7 +57,6 @@ Publish the config file with `php artisan vendor:publish --tag=culprit-config` i
 | Env key | Default | What it does |
 | --- | --- | --- |
 | `CULPRIT_KEY` | none | The project key, sent as a bearer token. Required: nothing is sent without it. |
-| `CULPRIT_URL` | `https://useculprit.com/api/errors` | The ingest endpoint. Nothing is sent when it is empty. |
 | `CULPRIT_SEND_IP` | `false` | Send the client IP address with HTTP context. |
 | `CULPRIT_SEND_USER_DETAILS` | `false` | Send the authenticated user's name and email (the ID is always sent). |
 | `CULPRIT_STRIP_QUERY_BINDINGS` | `true` | Remove bound values from `QueryException` messages. |
