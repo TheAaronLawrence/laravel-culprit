@@ -4,16 +4,10 @@ Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit
 
 ## Installation
 
-1. Install the package. It isn't on Packagist yet, so add the GitHub repository to your app's `composer.json` first:
-
-   ```json
-   "repositories": [
-       { "type": "vcs", "url": "https://github.com/TheAaronLawrence/laravel-culprit" }
-   ]
-   ```
+1. Install the package:
 
    ```bash
-   composer require theaaronlawrence/laravel-culprit:dev-main
+   composer require theaaronlawrence/laravel-culprit
    ```
 
 2. Add `Culprit::handles($exceptions);` inside `withExceptions` in `bootstrap/app.php`:
@@ -63,7 +57,7 @@ Publish the config file with `php artisan vendor:publish --tag=culprit-config` i
 | Env key | Default | What it does |
 | --- | --- | --- |
 | `CULPRIT_KEY` | none | The project key, sent as a bearer token. Required: nothing is sent without it. |
-| `CULPRIT_URL` | `http://useculprit.test/api/errors` | The ingest endpoint. Nothing is sent when it is empty. |
+| `CULPRIT_URL` | `https://useculprit.com/api/errors` | The ingest endpoint. Nothing is sent when it is empty. |
 | `CULPRIT_SEND_IP` | `false` | Send the client IP address with HTTP context. |
 | `CULPRIT_SEND_USER_DETAILS` | `false` | Send the authenticated user's name and email (the ID is always sent). |
 | `CULPRIT_STRIP_QUERY_BINDINGS` | `true` | Remove bound values from `QueryException` messages. |

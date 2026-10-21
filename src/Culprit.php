@@ -12,7 +12,7 @@ use Throwable;
  */
 final class Culprit
 {
-    public const DEFAULT_URL = 'http://useculprit.test/api/errors';
+    public const DEFAULT_URL = 'https://useculprit.com/api/errors';
 
     /**
      * Sent with every report. An error raised while handling a request that

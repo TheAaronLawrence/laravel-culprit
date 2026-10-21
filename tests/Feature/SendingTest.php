@@ -70,7 +70,7 @@ final class SendingTest extends ReporterTestCase
 
     public function test_the_default_url_is_used_when_none_is_set(): void
     {
-        $this->assertSame('http://useculprit.test/api/errors', Culprit::DEFAULT_URL);
+        $this->assertSame('https://useculprit.com/api/errors', Culprit::DEFAULT_URL);
         $this->assertSame(Culprit::DEFAULT_URL, (require __DIR__.'/../../config/culprit.php')['url']);
     }
 
