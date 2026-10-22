@@ -1,5 +1,5 @@
 {
-    "name": "theaaronlawrence/laravel-culprit",
+    "name": "theaaronlawrence/culprit-php",
     "description": "Report exceptions from your Laravel app to Culprit.",
     "type": "library",
     "license": "MIT",

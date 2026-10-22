@@ -2,12 +2,14 @@
 
 Report exceptions from your Laravel 12 or 13 app to [Culprit](https://useculprit.com).
 
+This package used to be called `theaaronlawrence/laravel-culprit`. To move, run `composer remove theaaronlawrence/laravel-culprit && composer require theaaronlawrence/culprit-php`; nothing else changes.
+
 ## Installation
 
 1. Install the package:
 
    ```bash
-   composer require theaaronlawrence/laravel-culprit
+   composer require theaaronlawrence/culprit-php
    ```
 
 2. Add `Culprit::handles($exceptions);` inside `withExceptions` in `bootstrap/app.php`:
